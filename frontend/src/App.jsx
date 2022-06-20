@@ -17,9 +17,36 @@ function App() {
       <Routes>
         <Route path="/" element={<Start />} />
         <Route path="try" element={<Graph />} />
+        <Route path="echo" element={<Echo />} />
       </Routes>
     </BrowserRouter>
   );
+}
+
+const Echo = () => {
+  const [string, setString] = React.useState('')
+  const [success, setSuccess] = React.useState(false);
+  React.useState(
+    async () => {
+      const response = await fetch('http://127.0.0.1:5000/echo/post',{
+        method: 'POST',
+        headers : { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+         }
+      });
+      const result = await response.json();
+      if(response.status === 200) {
+        setString(result.echo);
+        setSuccess(true);
+      }
+    }
+  )
+  return (
+    <>
+    {success && <h1>{string}</h1>}
+    </>
+  )
 }
 
 const Graph = () => {
