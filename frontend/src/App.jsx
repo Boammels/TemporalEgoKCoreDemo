@@ -7,17 +7,19 @@ import {
 import './App.css';
 import Graph from './pages/Graph' 
 import Search from './pages/Search'
+import NameList from './pages/NameList'
 
 function App() {
   return (
     <BrowserRouter>
       <header className='header'>
-        <p className='text'>Welcome!</p>
+        <a className='webName' href='/'>DBLP Ego-network K-core Calculator</a>
       </header>
       <Routes>
         <Route path="/" element={<Search />} />
         <Route path="/echo" element={<Echo />} />
         <Route path="/id/:id/:start/:end/:k" element={<Graph />} />
+        <Route path="/name/:name/:start/:end/:k" element={<NameList />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import './search.css';
 
 const Search = () => {
   const [type, setType] = React.useState('name');
@@ -8,6 +8,7 @@ const Search = () => {
   const [id, setId] = React.useState('');
   const [start, setStart] = React.useState(1938)
   const [end, setEnd] = React.useState(2023)
+  const [k, setK] = React.useState(1)
   const navigate = useNavigate()
 
   const submit = () => {
@@ -28,13 +29,30 @@ const Search = () => {
     } else if (parseInt(start) > parseInt(end)) {
       alert('start year should earlier or equal to end year')
     } else {
-      navigate('/'+type+'/'+key+'/'+parseInt(start)+'/'+parseInt(end)+'/7')
+      navigate('/'+type+'/'+key+'/'+parseInt(start)+'/'+parseInt(end)+'/'+k)
     }
-
   }
 
   return (
     <div className='main'>
+      <div className='yearInput'>
+        From: <input
+          type='number'
+          className='year'
+          value={start}
+          min={1938}
+          max={2023}
+          onChange={e => setStart(e.target.value)}
+        /> To: <input
+          type='number'
+          className='year'
+          value={end}
+          min={1938}
+          max={2023}
+          onChange={e => setEnd(e.target.value)}
+        />
+        <p className='minmax'>(min: 1938, max: 2023)</p>
+      </div>
       <div className='typeSelect'> 
         <input
           type='checkbox'
@@ -64,40 +82,34 @@ const Search = () => {
           }}
         />
         <span className='text'>Search by Name</span>
+        {type==='name' && <input
+          type='text'
+          value={name}
+          className='Input'
+          placeholder='Name of the researcher'
+          onChange={e => setName(e.target.value)}
+        />}
+        {type==='id' && <input
+          type='number'
+          value={id}
+          className='Input'
+          placeholder='ID of the researcher'
+          onChange={e => setId(e.target.value)}
+        />}
       </div>
-      {type==='name' && <input
-        type='text'
-        value={name}
-        className='Input'
-        placeholder='Name of the researcher'
-        onChange={e => setName(e.target.value)}
-      />}
-      {type==='id' && <input
-        type='number'
-        value={id}
-        className='Input'
-        placeholder='ID of the researcher'
-        onChange={e => setId(e.target.value)}
-      />}
-      <div className='yearInput'>
-        From: <input
-          type='number'
-          className='year'
-          value={start}
-          min={1938}
-          max={2023}
-          onChange={e => setStart(e.target.value)}
-        /> To: <input
-          type='number'
-          className='year'
-          value={end}
-          min={1938}
-          max={2023}
-          onChange={e => setEnd(e.target.value)}
-        />
-        <p className='minmax'>(min: 1938, max: 2023)</p>
+      <div className='k-value'>
+        <button
+          className='btn-sml'
+          onClick={() => {k > 0 ? setK(k-1) : setK(k)}}
+        >-</button>
+        <span> k = {k} </span>
+        <button
+          className='btn-sml'
+          onClick={() => {k < 20 ? setK(k+1) : setK(k)}}
+        >+</button>
       </div>
       <button
+        className='Submit'
         onClick={() => submit()}
       >Let's Start!</button>
     </div>

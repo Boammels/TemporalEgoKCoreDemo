@@ -12,31 +12,34 @@ const Graph = () => {
   const end = parseInt(useParams().end);
   const k = parseInt(useParams().k);
   const navigate = useNavigate();
+  const load = 1;
 
-  React.useState(
-    async () => {
-      axios.get('http://127.0.0.1:5000/id/',
-        { 
-          params : {
-            'id': id,
-            'start': start,
-            'end': end,
-            'k': k
-          }
-        }).then(({ data }) => {
+  const myfetch = async () => { 
+    axios.get('http://127.0.0.1:5000/id/',
+      { 
+        params : {
+          'id': id,
+          'start': start,
+          'end': end,
+          'k': k
+        }
+      }).then(({ data }) => {
         setElement(data.elements)
         setSuccess(true)
-      })
-      .catch((err) => {
-        alert(err);
-        navigate('/');
-      });
-    }
-  )
+      }
+    )
+    .catch((err) => {
+      alert(err.message);
+      navigate('/');
+    });
+  }
+  // eslint-disable-next-line
+  React.useEffect(() => myfetch, [load])
+
   return <>
     {success && <CytoscapeComponent
       elements={elements}
-      style={ { width: '100vw', height: 'calc(100vh - 50px)'}}
+      style={{width: '100vw', height: 'calc(100vh - 50px)'}}
       stylesheet={[
         {
           selector: 'node',
