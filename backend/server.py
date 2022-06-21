@@ -7,8 +7,8 @@ from functions import get_k_core_by_id, get_name_list
 import graph as GR
 
 min_year, max_year, year_offset, edges, authors = GR.read_graph(
-    "C:\\Users\\Simon\\Desktop\\Thesis\\DBLP2016\\tempGraph.json",
-    "C:\\Users\\Simon\\Desktop\\Thesis\\DBLP2016\\authors.json"
+    "..\\..\\tempGraph.json",
+    "..\\..\\authors.json"
 )
 APP = Flask(__name__)
 CORS(APP)
