@@ -37,13 +37,30 @@
 }
 
 .Input {
-  
   text-align: center;
   height: 5%;
   min-height: 30px;
   max-height: 40px;
   max-width: 400px;
   min-width: 300px;
+  font-size: 20px;
   width: 50%;
   margin: 20px;
+}
+
+.yearInput {
+  font-size: 20px
+}
+
+.year {
+  text-align: center;
+  font-size: 20px;
+  width: 100px;
+  height: 25px;
+  margin-bottom: 5px;
+}
+
+.minmax {
+  margin: 0;
+  margin-bottom: 20px;
 }
