@@ -94,18 +94,7 @@
 }
 
 .btn-sml:hover {
-    height: 30px;
-    width: 30px;
-    text-align: center;
-    margin-left: 10px;
-    margin-right: 10px;
     background-color: #cecece;
-    border-style: solid;
-    border-color: black;
-    font-size: 20px;
-    padding: none;
-    font-weight: 600;
-    border-radius: 5px;
 }
 
 
@@ -121,6 +110,7 @@
     border-radius: 5px;
     margin-bottom: 40px;
 }
+
 .Submit:hover {
     background-color: #b49300;
     border-color: #b49300;
@@ -134,4 +124,65 @@
     bottom: 0px;
     background-color: #eeeeee;
     width: 100%;
+}
+
+.Input2 {
+    text-align: center;
+    margin: auto;
+    height: 30px;
+    min-height: 30px;
+    max-height: 40px;
+    max-width: 400px;
+    min-width: 300px;
+    font-size: 15px;
+    width: 100%;
+    display: block;
+    border-radius: 5px;
+    border-style: solid;
+    margin-bottom: 10px;
+}
+
+.btn-medium1 {
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #ffbb00;
+    border-style: solid;
+    border-color: #ffbb00;
+    font-size: 20px;
+    padding: none;
+    font-weight: 600;
+    border-radius: 5px;
+}
+
+.btn-medium1:hover {
+    background-color: #b49300;
+    border-color: #b49300;
+    color: white;
+}
+
+.btn-medium2 {
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: #eeeeee;
+    border-style: solid;
+    border-color: black;
+    font-size: 20px;
+    padding: none;
+    font-weight: 600;
+    border-radius: 5px;
+}
+
+.btn-medium2:hover {
+    background-color: #cecece;
+}
+
+.line {
+    font-size: 20px;
+    margin: 10px;
 }
