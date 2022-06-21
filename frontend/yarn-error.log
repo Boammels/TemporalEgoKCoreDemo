@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /root/.yarn/bin/yarn.js add react-cytoscapejs
+  /usr/local/bin/node /root/.yarn/bin/yarn.js add react-couter-dom
 
 PATH: 
-  /root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:/root/.vscode-server/bin/c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5/bin/remote-cli:/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/Simon/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Simon/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin
+  /root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:/root/.vscode-server/bin/30d9c6cd9483b2cc586687151bcbcd635f373630/bin/remote-cli:/root/.yarn/bin:/root/.config/yarn/global/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/Git/cmd:/mnt/c/Users/Simon/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/Simon/AppData/Local/Programs/Microsoft VS Code/bin:/snap/bin
 
 Yarn version: 
   1.22.19
@@ -14,10 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/react-cytoscapejs: ETIMEDOUT
-      at Timeout._onTimeout (/root/.yarn/lib/cli.js:141550:19)
-      at listOnTimeout (node:internal/timers:559:17)
-      at processTimers (node:internal/timers:502:7)
+  Error: https://registry.yarnpkg.com/react-couter-dom: Not found
+      at Request.params.callback [as _callback] (/root/.yarn/lib/cli.js:66145:18)
+      at Request.self.callback (/root/.yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:527:28)
+      at Request.<anonymous> (/root/.yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:527:28)
+      at IncomingMessage.<anonymous> (/root/.yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:641:28)
+      at IncomingMessage.emit (node:events:539:35)
+      at endReadableNT (node:internal/streams/readable:1345:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
 
 npm manifest: 
   {
@@ -28,6 +35,8 @@ npm manifest:
       "@testing-library/jest-dom": "^5.16.4",
       "@testing-library/react": "^13.3.0",
       "@testing-library/user-event": "^13.5.0",
+      "axios": "^0.27.2",
+      "cytoscape": "^3.21.1",
       "react": "^18.1.0",
       "react-cytoscapejs": "^1.2.1",
       "react-dom": "^18.1.0",
@@ -2629,6 +2638,14 @@ Lockfile:
     resolved "https://registry.npmjs.org/axe-core/-/axe-core-4.4.2.tgz"
     integrity sha512-LVAaGp/wkkgYJcjmHsoKx4juT1aQvJyPcW09MLCjVTh3V2cc6PnyempiLMNH5iMdfIX/zdbjUx2KDjMLCTdPeA==
   
+  axios@^0.27.2:
+    version "0.27.2"
+    resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+    integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
+    dependencies:
+      follow-redirects "^1.14.9"
+      form-data "^4.0.0"
+  
   axobject-query@^2.2.0:
     version "2.2.0"
     resolved "https://registry.npmjs.org/axobject-query/-/axobject-query-2.2.0.tgz"
@@ -3474,7 +3491,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/csstype/-/csstype-3.1.0.tgz"
     integrity sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==
   
-  cytoscape@^3.2.19:
+  cytoscape@^3.2.19, cytoscape@^3.21.1:
     version "3.21.1"
     resolved "https://registry.yarnpkg.com/cytoscape/-/cytoscape-3.21.1.tgz#2d3a8b8ade8661c9efab2e9bf7a354b374d6cf0e"
     integrity sha512-mxdxCzuGHOMSWHUFO+/ZQPeMNtJAm81LGzdwP02LhT592ZRfHWCvHUY++HpnSjg/SgrKg1CMqegY/HvYLUS1qg==
@@ -4405,7 +4422,7 @@ Lockfile:
     resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.5.tgz"
     integrity sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg==
   
-  follow-redirects@^1.0.0:
+  follow-redirects@^1.0.0, follow-redirects@^1.14.9:
     version "1.15.1"
     resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.1.tgz"
     integrity sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==
@@ -4433,6 +4450,15 @@ Lockfile:
     version "3.0.1"
     resolved "https://registry.npmjs.org/form-data/-/form-data-3.0.1.tgz"
     integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
+    dependencies:
+      asynckit "^0.4.0"
+      combined-stream "^1.0.8"
+      mime-types "^2.1.12"
+  
+  form-data@^4.0.0:
+    version "4.0.0"
+    resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
+    integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
     dependencies:
       asynckit "^0.4.0"
       combined-stream "^1.0.8"
