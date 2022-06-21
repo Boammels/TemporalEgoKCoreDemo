@@ -3,6 +3,7 @@ import sys
 from json import dumps
 from flask_cors import CORS
 from flask import Flask, request
+from functions import get_k_core_by_id, get_name_list
 import graph as GR
 
 min_year, max_year, year_offset, edges, authors = GR.read_graph(
@@ -27,14 +28,19 @@ def app_get_k_core_by_id():
     end = request.args.get('end')
     k = request.args.get('k')
     try:
-        result = GR.get_k_core_by_id(edges, year_offset, authors, int(start), int(end), int(min_year), int(max_year), id, int(k))
+        result = get_k_core_by_id(edges, year_offset, authors, int(start), int(end), int(min_year), int(max_year), id, int(k))
     except ValueError as exception:
         return dumps({
             "code": 400,
-            "error": str(exception),
+            "message": str(exception),
         }), 400
     return dumps(result)
 
+@APP.route('/name/', methods=['GET'])
+def app_get_name_list():
+    name = request.args.get('name')
+    result = get_name_list(authors, name)
+    return dumps(result)
 
 if __name__ == "__main__":
     APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 5000))
