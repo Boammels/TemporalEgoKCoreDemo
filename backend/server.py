@@ -11,11 +11,30 @@ min_year, max_year, year_offset, edges, authors = GR.read_graph(
 )
 APP = Flask(__name__)
 CORS(APP)
-APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 5000))
 
-@APP.route('/echo/post', methods=['POST'])
+
+@APP.route('/echo/post/', methods=['GET'])
 def echo2():
     """ Description of function """
     return dumps({
         'echo' : 'Hwllo World',
     })
+
+@APP.route('/id/', methods=['GET'])
+def app_get_k_core_by_id():
+    id = request.args.get('id')
+    start = request.args.get('start')
+    end = request.args.get('end')
+    k = request.args.get('k')
+    try:
+        result = GR.get_k_core_by_id(edges, year_offset, authors, int(start), int(end), int(min_year), int(max_year), id, int(k))
+    except ValueError as exception:
+        return dumps({
+            "code": 400,
+            "error": str(exception),
+        }), 400
+    return dumps(result)
+
+
+if __name__ == "__main__":
+    APP.run(port=(sys.argv[1] if len(sys.argv) > 1 else 5000))
