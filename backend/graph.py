@@ -1,6 +1,13 @@
 import json
 import numpy as np
 
+def checkEdges(authors, start, end, year_offset, edges):
+    haveEdges = np.zeros((len(authors),), dtype=bool)
+    for i in edges[2*year_offset[start]:2*year_offset[end+1]]:
+        haveEdges[i] = True
+    return haveEdges
+
+
 '''
 @returns
     min-year, max-year -- the time window of the temporal graph

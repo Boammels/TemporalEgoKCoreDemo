@@ -39,7 +39,9 @@ def app_get_k_core_by_id():
 @APP.route('/name/', methods=['GET'])
 def app_get_name_list():
     name = request.args.get('name')
-    result = get_name_list(authors, name)
+    start = request.args.get('start')
+    end = request.args.get('end')
+    result = get_name_list(authors, name, int(start) - min_year, int(end) - min_year, year_offset, edges)
     return dumps(result)
 
 if __name__ == "__main__":
