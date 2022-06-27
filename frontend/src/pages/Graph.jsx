@@ -37,18 +37,25 @@ const Graph = () => {
   }
   // eslint-disable-next-line
   React.useEffect(() => myfetch, [load])
-
+  const str = '< HOME'
   return <>
+    
+    <button
+      className='back'
+      onClick = {() => navigate('/')}
+    >{str}</button>
+    {success && elements.length !== 0 && <div className='desc'>
+      <p>{k}-core of the Ego Network for <u>{center}</u> from {start} to {end}</p>
+    </div>}
     {success && elements.length !== 0 && <CytoscapeComponent
       elements={elements}
-      style={{width: '100vw', height: 'calc(100vh - 50px)'}}
+      style={{width: '100vw ', height: 'calc(100vh - 120px)', backgroundColor: '#DBE2E9'}}
       stylesheet={[
         {
           selector: 'node',
           style: {
             width: 20,
             height: 20,
-            color: 'black',
             label: 'data(label)'
           }
         },
@@ -56,7 +63,6 @@ const Graph = () => {
           selector: 'edge',
           style: {
             width: 1,
-            color: '#123333'
           }
         }
       ]}
@@ -75,6 +81,7 @@ const Graph = () => {
     {!success && <div className='main'>
       <p className='line'><b>Loading......</b></p>
     </div>}
+    
   </>
 }
 

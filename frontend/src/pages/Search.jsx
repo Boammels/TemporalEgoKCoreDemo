@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './search.css';
+import PrettoSlider from './PrettoSlider'
 
 const Search = () => {
   const [type, setType] = React.useState('name');
@@ -8,7 +9,7 @@ const Search = () => {
   const [id, setId] = React.useState('');
   const [start, setStart] = React.useState(1938)
   const [end, setEnd] = React.useState(2023)
-  const [k, setK] = React.useState(1)
+  const [k, setK] = React.useState(2)
   const navigate = useNavigate()
 
   const submit = () => {
@@ -35,24 +36,6 @@ const Search = () => {
 
   return (
     <div className='main'>
-      <div className='yearInput'>
-        From: <input
-          type='number'
-          className='year'
-          value={start}
-          min={1938}
-          max={2023}
-          onChange={e => setStart(e.target.value)}
-        /> To: <input
-          type='number'
-          className='year'
-          value={end}
-          min={1938}
-          max={2023}
-          onChange={e => setEnd(e.target.value)}
-        />
-        <p className='minmax'>(min: 1938, max: 2023)</p>
-      </div>
       <div className='typeSelect'> 
         <input
           type='checkbox'
@@ -97,17 +80,30 @@ const Search = () => {
           onChange={e => setId(e.target.value)}
         />}
       </div>
-      <div className='k-value'>
-        <button
-          className='btn-sml'
-          onClick={() => {k > 0 ? setK(k-1) : setK(k)}}
-        >-</button>
-        <span> k = {k} </span>
-        <button
-          className='btn-sml'
-          onClick={() => {k < 20 ? setK(k+1) : setK(k)}}
-        >+</button>
+      <div className='yearInput'>
+        <p className='minmax'>Year selected: ( <b>{start}</b> ················ <b>{end}</b> )</p>
+        <PrettoSlider
+          value={ [start, end] }
+          min={1938}
+          max={2023}
+          valueLabelDisplay="auto"
+          onChange={(e) => {
+            setStart(e.target.value[0]);
+            setEnd(e.target.value[1]);
+          }}
+        />
+        <p className='minmax'> K value selected: ( <b>{k}</b> )</p>
+        <PrettoSlider
+          value={k}
+          aria-label="Default"
+          min={0}
+          max={20}
+          valueLabelDisplay="auto"
+          onChange={(e) => {
+            setK(e.target.value)
+          }} />
       </div>
+      
       <button
         className='Submit'
         onClick={() => submit()}
@@ -117,3 +113,4 @@ const Search = () => {
 }
 
 export default Search
+

@@ -3,14 +3,17 @@
     text-align: center;
     min-height: calc(100vh - 50px);
     height: fit-content;
-    min-width: 500px;
-    background-color: #eeeeee;
+    min-width: 1000px;
+    background-color: #DBE2E9;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #282c34;
+    color: #6f926e;
+    background-color: #DBE2E9;
 }
+
+
 
 .checkbox {
     padding: 5px;
@@ -19,11 +22,10 @@
 }
 
 .typeSelect {
-    border: #dddddd 5px solid;
     padding: 20px;
-    width: 420px;
+    width: 100%;
+    min-width: 420px;
     text-align: center;
-    margin: 10px;
 }
 
 .text {
@@ -36,22 +38,28 @@
     height: 40px;
     min-height: 30px;
     max-height: 40px;
-    max-width: 400px;
+    max-width: 600px;
     min-width: 300px;
     font-size: 20px;
     width: 100%;
     margin-top: 20px;
     display: block;
-    border-radius: 5px;
-    border-style: solid
+    border-radius: 20px;
+    border-style: solid;
+    border-color: #6f926e;
+    background-color: #DBE2E9;
+    color: #6f926e;
 }
 
+.Input::placeholder {
+    color: #6f926e;
+}
+
+
 .yearInput {
-    border: #dddddd 5px solid;
     padding: 20px;
     font-size: 20px;
     width: 420px;
-    margin: 10px;
 }
 
 .year {
@@ -59,71 +67,63 @@
     font-size: 20px;
     width: 100px;
     height: 25px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: #6f926e;
+    background-color: #DBE2E9;
+    color: #6f926e;
 }
 
 .minmax {
     margin: 0;
+    font-size: 15px;
 }
-
-.k-value {
-    border: #dddddd 5px solid;
-    padding: 20px;
-    width:420px;
-    font-size: 20px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center
-}
-
-.btn-sml {
-    height: 30px;
-    width: 30px;
-    text-align: center;
-    margin-left: 10px;
-    margin-right: 10px;
-    background-color: #eeeeee;
-    border-style: solid;
-    border-color: black;
-    font-size: 20px;
-    padding: none;
-    font-weight: 600;
-    border-radius: 5px;
-}
-
-.btn-sml:hover {
-    background-color: #cecece;
-}
-
 
 .Submit {
     height: 40px;
     width: 400px;
     font-size:20px;
-    background-color: #ffbb00;
+    background-color: #6f926e;
     font-weight: 800;
     border-style: solid;
-    border-color: #ffbb00;
+    border-color: #6f926e;
     border-width: 1px;
     border-radius: 5px;
     margin-bottom: 40px;
+    color: #DBE2E9
 }
 
 .Submit:hover {
-    background-color: #b49300;
-    border-color: #b49300;
-    color: #eeeeee
+    background-color: #6F926E;
+    border-color: #6F926E;
 }
 
+
+.line {
+    font-size: 20px;
+    margin: 10px;
+}
+
+/** namelist */
+
 .searchbar {
+    padding-top: 20px;
     text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0px;
-    background-color: #eeeeee;
+    background-color: #DBE2E9;
     width: 100%;
+    color: #6f926e;
+}
+
+
+.main2 {
+    text-align: center;
+    min-height: calc(100vh - 50px);
+    height: fit-content;
+    min-width: 1000px;
+    background-color: #6f926e;
+    color: #6f926e;
+    background-color: #DBE2E9;
 }
 
 .Input2 {
@@ -132,7 +132,7 @@
     height: 30px;
     min-height: 30px;
     max-height: 40px;
-    max-width: 400px;
+    max-width: 600px;
     min-width: 300px;
     font-size: 15px;
     width: 100%;
@@ -140,49 +140,77 @@
     border-radius: 5px;
     border-style: solid;
     margin-bottom: 10px;
+    border-radius: 15px;
+    color: #6f926e;
+    background-color: #DBE2E9;
+    border-color: #6f926e;
+}
+
+
+.parent {
+    font-size: 20px;
+    width: 90%;
+    min-width: 540px;
+    max-width: 800px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.child {
+    flex: 1;
+    padding: 10px;
 }
 
 .btn-medium1 {
     height: 30px;
-    width: 100px;
+    width: 200px;
     text-align: center;
     margin-left: 10px;
     margin-right: 10px;
-    background-color: #ffbb00;
+    background-color: #6f926e;
     border-style: solid;
-    border-color: #ffbb00;
+    border-color: #6f926e;
     font-size: 20px;
     padding: none;
     font-weight: 600;
     border-radius: 5px;
+    color: #DBE2E9
 }
 
 .btn-medium1:hover {
-    background-color: #b49300;
-    border-color: #b49300;
-    color: white;
+    color:  #b59a48;
 }
 
 .btn-medium2 {
     height: 30px;
-    width: 100px;
+    width: 200px;
     text-align: center;
     margin-left: 10px;
     margin-right: 10px;
-    background-color: #eeeeee;
+    background-color: #DBE2E9;
     border-style: solid;
-    border-color: black;
+    border-color: #6f926e;
     font-size: 20px;
     padding: none;
     font-weight: 600;
     border-radius: 5px;
+    color: #6f926e
 }
 
 .btn-medium2:hover {
-    background-color: #cecece;
+    background-color: #b59a48;
 }
 
-.line {
-    font-size: 20px;
-    margin: 10px;
+.Results {
+    width: 200px;
+    height: 80px;
+    border-color:#DBE2E9;
+    border-style: solid;
+    color: #6F926E;
+}
+
+.Results:hover {
+    background-color: #6F926E;
+    color: #DBE2E9;
 }

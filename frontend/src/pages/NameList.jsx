@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './search.css'
+import PrettoSlider from './PrettoSlider'
 
 const NameList = () => {
   const [start, setStart] = React.useState(parseInt(useParams().start));
@@ -13,11 +14,15 @@ const NameList = () => {
   const navigate = useNavigate();
   let load = 1;
   const searchName = useParams().name
+  const m_end = parseInt(useParams().end)
+  const m_start = parseInt(useParams().start)
   const myfetch = async () => { 
     axios.get('http://127.0.0.1:5000/name/',
       { 
         params : {
-          'name': name
+          'name': name,
+          'start': m_start,
+          'end': m_end,
         }
       }).then(({ data }) => {
         setNames(data.names);
@@ -49,33 +54,14 @@ const NameList = () => {
     }
   }
 
+  const goto = (id) => {
+    navigate('/id/' + id + '/' + m_start + '/' + m_end + '/' + k);
+  }
+
   return (
-    <><div className='main'>
+    <>
+      <div className='main2'>
         <div className='searchbar' >
-          From: <input
-            type='number'
-            className='year'
-            value={start}
-            min={1938}
-            max={2023}
-            onChange={e => setStart(e.target.value)}
-          /> To: <input
-            type='number'
-            className='year'
-            value={end}
-            min={1938}
-            max={2023}
-            onChange={e => setEnd(e.target.value)}
-          />
-          <button
-            className='btn-sml'
-            onClick={() => {k > 0 ? setK(k-1) : setK(k)}}
-          >-</button>
-          <span> k = {k} </span>
-          <button
-            className='btn-sml'
-            onClick={() => {k < 20 ? setK(k+1) : setK(k)}}
-          >+</button>
           <input
             type='text'
             value={name}
@@ -83,30 +69,66 @@ const NameList = () => {
             placeholder='Name of the researcher'
             onChange={e => setName(e.target.value)}
           />
+          <div className='parent'>
+            <div className='child'>
+              <p className='minmax'>Year selected: ( <b>{start}</b> ················ <b>{end}</b> )</p>
+              <PrettoSlider
+                value={ [start, end] }
+                min={1938}
+                max={2023}
+                valueLabelDisplay="auto"
+                onChange={(e) => {
+                  setStart(e.target.value[0]);
+                  setEnd(e.target.value[1]);
+                }}
+              />
+            </div>
+            <div className='child'>
+              <p className='minmax'> K value selected: ( <b>{k}</b> )</p>
+              <PrettoSlider
+                value={k}
+                aria-label="Default"
+                min={0}
+                max={20}
+                valueLabelDisplay="auto"
+                onChange={(e) => {
+                  setK(e.target.value)
+                }}
+              />
+            </div>
+          </div>
           <button
             className='btn-medium1'
             onClick={() => submit()}
+            style={{
+              backgroundColor: (start !== m_start || end !== m_end) ?  '#b59a48' : '#6f926e',
+              borderColor: (start !== m_start || end !== m_end) ? '#b59a48' : '#6f926e'
+            }}
           >Search</button>
           <button
             className='btn-medium2'
-            onClick={() => navigate('')}  
+            onClick={() => navigate('/')}  
           >Cancel</button>
         </div>
+        {(start !== m_start || end !== m_end) && <p>Your query time has changed and the seaching results for names may have changed. Click Search to reload the authors.</p>}
+        {names.lendth !== 0 && success && <p>Results for '{searchName}' from {m_start} to {m_end}</p>}
         <div>
           {success && names.map((name) => {
             return (<>
-              <a
+              <button
                 key={name.id}
-                href={'http://localhost:3000/id/'+name.id +'/'+start+'/'+end+'/'+k}
+                className='Results'
+                onClick = {() => goto(name.id)}
               >
                 <div className='nameListItem'>
-                  <p>{name.name}</p>
+                  <p><b>{name.name.length > 20 ? name.name.slice(0,17) + '...' : name.name}</b></p>
+                  <p>ID:{name.id}</p>
                 </div>
-              </a>
+              </button>
             </>);
           })}
         </div>
-        {names.length === 0 && success && <p className='line'>No results for '{searchName}'</p>}
+        {names.length === 0 && success && <p className='line'>No results for '{searchName}' from {m_start} to {m_end}</p>}
         {names.length === 0 && !success && <p className='line'>Loading......</p>}
         <div style={{height:'100px', width:'100%'}}></div>
       </div>
