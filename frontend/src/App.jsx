@@ -18,8 +18,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Search />} />
         <Route path="/echo" element={<Echo />} />
-        <Route path="/id/:id/:start/:end/:k" element={<Graph />} />
-        <Route path="/name/:name/:start/:end/:k" element={<NameList />} />
+        <Route path="/id/:id/" element={<Graph />} />
+        <Route path="/name/:name/" element={<NameList />} />
       </Routes>
     </BrowserRouter>
   );

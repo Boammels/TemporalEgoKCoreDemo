@@ -1,16 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './search.css';
-import PrettoSlider from './PrettoSlider'
+import PrettoSlider from './PrettoSlider';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Search = () => {
   const [type, setType] = React.useState('name');
   const [name, setName] = React.useState('');
   const [id, setId] = React.useState('');
+  localStorage.setItem('start', 1938);
+  localStorage.setItem('end', 2023)
+  localStorage.setItem('k', 2);
   const [start, setStart] = React.useState(1938)
   const [end, setEnd] = React.useState(2023)
   const [k, setK] = React.useState(2)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const submit = () => {
     let key = '';
@@ -19,8 +23,6 @@ const Search = () => {
     } else {
       key = id;
     }
-    console.log(start)
-    console.log(end)
     if (key === '') {
       alert('Alert: ' + type + ' cannot be empty!');
     } else if (isNaN(parseInt(start)) || isNaN(parseInt(end))) {
@@ -30,7 +32,10 @@ const Search = () => {
     } else if (parseInt(start) > parseInt(end)) {
       alert('start year should earlier or equal to end year')
     } else {
-      navigate('/'+type+'/'+key+'/'+parseInt(start)+'/'+parseInt(end)+'/'+k)
+      localStorage.setItem('start', start);
+      localStorage.setItem('end', end)
+      localStorage.setItem('k', k);
+      navigate('/'+type+'/'+key)
     }
   }
 
@@ -88,8 +93,8 @@ const Search = () => {
           max={2023}
           valueLabelDisplay="auto"
           onChange={(e) => {
-            setStart(e.target.value[0]);
-            setEnd(e.target.value[1]);
+            setStart(e.target.value[0])
+            setEnd(e.target.value[1])
           }}
         />
         <p className='minmax'> K value selected: ( <b>{k}</b> )</p>
@@ -107,10 +112,10 @@ const Search = () => {
       <button
         className='Submit'
         onClick={() => submit()}
-      >Let's Start!</button>
+      ><SearchIcon fontSize="large" /></button>
     </div>
   )
 }
 
-export default Search
+export default Search;
 

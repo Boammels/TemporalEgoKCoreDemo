@@ -9,9 +9,9 @@ const Graph = () => {
   const [elements, setElement] = React.useState([]);
   const [center, setCenter] = React.useState('')
   const id = useParams().id;
-  const start = parseInt(useParams().start);
-  const end = parseInt(useParams().end);
-  const k = parseInt(useParams().k);
+  const start = localStorage.getItem('start');
+  const end = localStorage.getItem('end');
+  const k = localStorage.getItem('k');
   const navigate = useNavigate();
   const load = 1;
 
@@ -27,6 +27,7 @@ const Graph = () => {
       }).then(({ data }) => {
         setElement(data.elements)
         setCenter(data.author)
+        console.log(data.author_list)
         setSuccess(true)
       }
     )
@@ -35,40 +36,57 @@ const Graph = () => {
       navigate('/');
     });
   }
+  /*var myCyRef = undefined;
+  const checkedge = (ele, myCyRef) => {
+    if (myCyRef.get(ele.data('source')).selected || myCyRef.get(ele.data('target')).selected) {
+      return true;
+    }
+  }*/
   // eslint-disable-next-line
   React.useEffect(() => myfetch, [load])
-  const str = '< HOME'
+  const str = '<id = ' + id + '>'
   return <>
-    
-    <button
-      className='back'
-      onClick = {() => navigate('/')}
-    >{str}</button>
-    {success && elements.length !== 0 && <div className='desc'>
-      <p>{k}-core of the Ego Network for <u>{center}</u> from {start} to {end}</p>
-    </div>}
     {success && elements.length !== 0 && <CytoscapeComponent
       elements={elements}
-      style={{width: '100vw ', height: 'calc(100vh - 120px)', backgroundColor: '#DBE2E9'}}
+      style={{width: '100vw', height: 'calc(100vh - 100px)', backgroundColor: '#DBE2E9'}}
+      //cy={(cy) => {myCyRef = cy}}
       stylesheet={[
         {
           selector: 'node',
           style: {
-            width: 20,
-            height: 20,
-            label: 'data(label)'
+            'width': 20,
+            'height': 20,
+            'label': 'data(label)',
+            "background-color": (ele) => {return ele.data('label') === center ? '#b59a48' : '#6f926e' },
+            "color": 'black'
+          },
+          onClick: (ele) => console.log(ele.data('id'))
+        },
+        {
+          selector:'node:selected',
+          style: {
+            'background-color': '#516e8a'
           }
         },
         {
           selector: 'edge',
           style: {
-            width: 1,
+            'width': 1,
+            'border-color': 'red'
+            //'background-color': (ele, myCyRef) => {return checkedge(ele, myCyRef) ? '#516e8a' : '#DBE2E9'}
           }
         }
       ]}
       layout={{
         name:'circle'
       }}
+      panningEnabled={true}
+      //zoomingEnabled={false}
+      zoom={0.9}
+      minZoom={0.9}
+      maxZoom={0.9}
+      selectionType='single'
+
     />}
     {success && elements.length === 0 && <div className='main'>
       <p className='line'>There isn't a <b>{k}</b>-core subgraph</p>
@@ -81,7 +99,9 @@ const Graph = () => {
     {!success && <div className='main'>
       <p className='line'><b>Loading......</b></p>
     </div>}
-    
+    <div className='desc'>
+      <p>{k}-core of the Ego Network for {success && <u>{center}</u>} {!success && <u>{str}</u>} from {start} to {end}</p>
+    </div>
   </>
 }
 

@@ -1,28 +1,28 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './search.css'
-import PrettoSlider from './PrettoSlider'
+import './search.css';
+import PrettoSlider from './PrettoSlider';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const NameList = () => {
-  const [start, setStart] = React.useState(parseInt(useParams().start));
-  const [end, setEnd] = React.useState(parseInt(useParams().end));
-  const [k, setK] = React.useState(parseInt(useParams().k)) ;
+  const [start, setStart] = React.useState(parseInt(localStorage.getItem('start')));
+  const [end, setEnd] = React.useState(parseInt(localStorage.getItem('end')));
+  const [k, setK] = React.useState(parseInt(localStorage.getItem('k'))) ;
   const [names, setNames] = React.useState([]);
   const [success, setSuccess] = React.useState(false);
   const [name, setName] = React.useState(useParams().name);
   const navigate = useNavigate();
   let load = 1;
-  const searchName = useParams().name
-  const m_end = parseInt(useParams().end)
-  const m_start = parseInt(useParams().start)
+  const searchName = useParams().name;
   const myfetch = async () => { 
     axios.get('http://127.0.0.1:5000/name/',
       { 
         params : {
           'name': name,
-          'start': m_start,
-          'end': m_end,
+          'start': localStorage.getItem('start'),
+          'end': localStorage.getItem('end'),
         }
       }).then(({ data }) => {
         setNames(data.names);
@@ -49,13 +49,17 @@ const NameList = () => {
     } else if (parseInt(start) > parseInt(end)) {
       alert('start year should earlier or equal to end year')
     } else {
-      navigate('/name/'+name+'/'+parseInt(start)+'/'+parseInt(end)+'/'+k)
+      localStorage.setItem('k', k)
+      localStorage.setItem('start', start)
+      localStorage.setItem('end', end)
+      navigate('/name/'+name)
       window.location.reload()
     }
   }
 
   const goto = (id) => {
-    navigate('/id/' + id + '/' + m_start + '/' + m_end + '/' + k);
+    localStorage.setItem('k', k)
+    navigate('/id/' + id + '/');
   }
 
   return (
@@ -78,8 +82,8 @@ const NameList = () => {
                 max={2023}
                 valueLabelDisplay="auto"
                 onChange={(e) => {
-                  setStart(e.target.value[0]);
-                  setEnd(e.target.value[1]);
+                  setStart(e.target.value[0])
+                  setEnd(e.target.value[1])
                 }}
               />
             </div>
@@ -101,22 +105,22 @@ const NameList = () => {
             className='btn-medium1'
             onClick={() => submit()}
             style={{
-              backgroundColor: (start !== m_start || end !== m_end) ?  '#b59a48' : '#6f926e',
-              borderColor: (start !== m_start || end !== m_end) ? '#b59a48' : '#6f926e'
+              backgroundColor: (start !== parseInt(localStorage.getItem('start')) || end !== parseInt(localStorage.getItem('end'))) ?  '#b59a48' : '#6f926e',
+              borderColor: (start !== parseInt(localStorage.getItem('start')) || end !== parseInt(localStorage.getItem('end'))) ? '#b59a48' : '#6f926e'
             }}
-          >Search</button>
+          ><CheckCircleIcon /></button>
           <button
             className='btn-medium2'
             onClick={() => navigate('/')}  
-          >Cancel</button>
+          ><CancelOutlinedIcon /></button>
         </div>
-        {(start !== m_start || end !== m_end) && <p>Your query time has changed and the seaching results for names may have changed. Click Search to reload the authors.</p>}
-        {names.lendth !== 0 && success && <p>Results for '{searchName}' from {m_start} to {m_end}</p>}
+        {(start !== parseInt(localStorage.getItem('start')) || end !== parseInt(localStorage.getItem('end'))) && <p>Your query time has changed and the seaching results for names may have changed. Click Search to reload the authors.</p>}
+        {names.lendth !== 0 && success && <p>Results for '{searchName}' from {localStorage.getItem('start')} to {localStorage.getItem('end')}</p>}
         <div>
-          {success && names.map((name) => {
+          {success && names.map((name, index) => {
             return (<>
               <button
-                key={name.id}
+                key={index}
                 className='Results'
                 onClick = {() => goto(name.id)}
               >
@@ -128,7 +132,7 @@ const NameList = () => {
             </>);
           })}
         </div>
-        {names.length === 0 && success && <p className='line'>No results for '{searchName}' from {m_start} to {m_end}</p>}
+        {names.length === 0 && success && <p className='line'>No results for '{searchName}' from {localStorage.getItem('start')} to {localStorage.getItem('end')}</p>}
         {names.length === 0 && !success && <p className='line'>Loading......</p>}
         <div style={{height:'100px', width:'100%'}}></div>
       </div>
