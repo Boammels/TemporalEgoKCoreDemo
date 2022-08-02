@@ -33,3 +33,15 @@ def get_k_core_by_id(edges, year_offset, authors, start, end, min_year, max_year
         return {'elements': [], 'author': authors[int(id)]}
     return GR.generate_graph(nodes, offset_degree, neighbors, node_offsets, labels, authors, k, int(id))
 
+def get_author_detail(authors, id, articles, detail):
+    name = authors[int(id)]
+    career = []
+    articles = []
+    return {
+        'name': name,
+        'id': id,
+        'career': career,
+        'articles': articles
+    }
+
+

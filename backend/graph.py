@@ -100,7 +100,7 @@ def query_ego_graph(edges, time_offset, ts, te, node_count, center):
         for v in neighbors[u].keys():
             neighborlist[curr_offset[u]] = v
             curr_offset[u] += 1
-    print('Graph query done!')
+    print('Graph query done!')  
     return degrees, neighborlist, node_offset, label
 
 '''
@@ -242,26 +242,19 @@ def k_core(degrees, neighbors, offset_node, node_count, k):
 def generate_graph(nodes, offset_degree, neighbors, node_offsets, labels, authors, k, id):
     in_ego_core = np.zeros((len(nodes), ), dtype=bool)
     graph = []
+    authors_list  = []
     for i in range(offset_degree[k], offset_degree[len(offset_degree)-1]):
         in_ego_core[nodes[i]] = True
+        data = {
+                'data': {
+                    'id': str(labels[nodes[i]]),
+                    'label': authors[labels[nodes[i]]]
+                }
+            }
         if nodes[i] == 0:
-            graph.append({
-                'data': {
-                    'id': str(labels[nodes[i]]),
-                    'label': authors[labels[nodes[i]]]
-                },
-                'style': {
-                    'background-color': 'red',
-                    'color': '#123aee'
-                }
-            })
-        else:
-            graph.append({
-                'data': {
-                    'id': str(labels[nodes[i]]),
-                    'label': authors[labels[nodes[i]]]
-                }
-            })
+            data['selected'] = True
+        graph.append(data)
+        authors_list.append({'id': str(labels[nodes[i]]), 'name': authors[labels[nodes[i]]]})
     for i in range(len(labels)):
         for j in neighbors[node_offsets[i]:node_offsets[i+1]]:
             if i < j and in_ego_core[i] and in_ego_core[j]:
@@ -269,9 +262,10 @@ def generate_graph(nodes, offset_degree, neighbors, node_offsets, labels, author
                     'data': {
                         'source': str(labels[i]),
                         'target': str(labels[j])
-                    }
+                    },
+                    'selectable': False
                 })
-    data_set = {'elements': graph, 'author': authors[id]}
+    data_set = {'elements': graph, 'author': authors[id], 'author_list': authors_list}
     return data_set
 
 

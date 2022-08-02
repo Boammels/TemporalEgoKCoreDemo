@@ -3,7 +3,7 @@ import sys
 from json import dumps
 from flask_cors import CORS
 from flask import Flask, request
-from functions import get_k_core_by_id, get_name_list
+from functions import get_k_core_by_id, get_name_list, get_author_detail
 import graph as GR
 
 min_year, max_year, year_offset, edges, authors = GR.read_graph(
@@ -42,6 +42,12 @@ def app_get_name_list():
     start = request.args.get('start')
     end = request.args.get('end')
     result = get_name_list(authors, name, int(start) - min_year, int(end) - min_year, year_offset, edges)
+    return dumps(result)
+
+@APP.route('/author/', methods=['GET'])
+def app_get_name_detail():
+    id = request.args.get('id')
+    result = get_author_detail(authors, id, {}, {})
     return dumps(result)
 
 if __name__ == "__main__":
