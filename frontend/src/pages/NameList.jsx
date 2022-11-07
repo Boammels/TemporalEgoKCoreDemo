@@ -92,7 +92,7 @@ const NameList = () => {
               <PrettoSlider
                 value={k}
                 aria-label="Default"
-                min={0}
+                min={1}
                 max={20}
                 valueLabelDisplay="auto"
                 onChange={(e) => {
