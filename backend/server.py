@@ -10,6 +10,8 @@ min_year, max_year, year_offset, edges, authors = GR.read_graph(
     "..\\..\\tempGraph.json",
     "..\\..\\authors.json"
 )
+neighbours, index = GR.indexCreate(edges, year_offset, len(authors), max_year-min_year)
+print(index[0])
 APP = Flask(__name__)
 CORS(APP)
 
@@ -28,7 +30,7 @@ def app_get_k_core_by_id():
     end = request.args.get('end')
     k = request.args.get('k')
     try:
-        result = get_k_core_by_id(edges, year_offset, authors, int(start), int(end), int(min_year), int(max_year), id, int(k))
+        result = get_k_core_by_id(neighbours, index, authors, int(start), int(end), int(min_year), int(max_year), id, int(k))
     except ValueError as exception:
         return dumps({
             "code": 400,

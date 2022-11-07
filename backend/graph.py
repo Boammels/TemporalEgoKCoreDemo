@@ -1,6 +1,51 @@
 import json
 import numpy as np
 
+def max_min_three (a,b,c):
+    if a >= b:
+        if c >= a:
+            return c, a, b
+        elif b >= c:
+            return a, b, c
+        else:
+            return a, c, b
+    else:
+        if c >= b:
+            return c, b, a 
+        elif a >= c:
+            return b, a, c
+        else:
+            return b, c, a
+
+def indexCreate(edges, time_offset, n, time):
+    index = []
+    neighbours = []
+    for i in range(n):
+        index.append({})
+        neighbours.append({})
+    for t in range(time):
+        print(f'{t} of {time}')
+        for i in range(time_offset[t], time_offset[t+1]):
+            s = edges[i*2]
+            e = edges[i*2+1]
+            neighbours[e][s] = t
+            neighbours[s][e] = t
+            for m in neighbours[s].keys():
+                if m in neighbours[e]:
+                    end, _, start = max_min_three(neighbours[s][m], neighbours[e][m], t)
+                    c, b, a = max_min_three(s, e, m)
+                    if (b, c) in index[a]:
+                        skip = False
+                        for (s_t, e_t) in index[a][(b, c)]:
+                            if s_t >= start and e_t <= end:
+                                skip = True
+                        if not skip:
+                            index[a][(b, c)].append((start, end))
+                    else:
+                        index[a][(b, c)] = [(start, end)]
+    return neighbours, index
+
+
 def checkEdges(authors, start, end, year_offset, edges):
     haveEdges = np.zeros((len(authors),), dtype=bool)
     for i in edges[2*year_offset[start]:2*year_offset[end+1]]:
@@ -54,54 +99,43 @@ def read_graph (graph, authors):
     offsets -- the offset of each node in the neighbors array
     labels -- the labels for the new ids of the remaining nodes, string
 '''
-def query_ego_graph(edges, time_offset, ts, te, node_count, center):
+def query_ego_graph(neighbours, index, ts, te, node_count, center):
     in_ego = np.full((node_count,), -1, dtype=int)
     in_ego[center] = 0
     curr = 1
-    for j in range(time_offset[ts], time_offset[te]):
-        s = edges[2*j]
-        e = edges[2*j+1]
-        if s == center:
-            if in_ego[e] == -1:
-                in_ego[e] = curr
-                curr += 1
-        if e == center:
-            if in_ego[s] == -1:
-                in_ego[s] = curr
-                curr += 1
-    # mark every node in the ego network during the time period
-    neighbors = []
-    for i in range(curr):
-        neighbors.append({})
+    neighborlist = [[]]
+    nodes = list(neighbours[center].keys())
+    for i in range(len(nodes)):
+        node1 = nodes[i]
+        for j in range(i+1, len(nodes)):
+            node2 = nodes[j]
+            maxi, midi, mini = max_min_three(node1, node2, center)
+            if (midi, maxi) in index[mini]:
+                for (st, et) in index[mini][(midi, maxi)]:
+                    if ts <= st and te >= et:
+                        if in_ego[node1] == -1:
+                            in_ego[node1] = curr
+                            neighborlist.append([0])
+                            neighborlist[0].append(curr)
+                            curr += 1
+                        if in_ego[node2] == -1:
+                            in_ego[node2] = curr
+                            neighborlist.append([0])
+                            neighborlist[0].append(curr)
+                            curr += 1
+                        neighborlist[in_ego[node1]].append(in_ego[node2])
+                        neighborlist[in_ego[node2]].append(in_ego[node1])
+                    break
     label = np.zeros((curr,), dtype=int)
+    degrees = np.zeros((curr,), dtype=int)
     for i in range(node_count):
         if in_ego[i] != -1:
             label[in_ego[i]] = i
-    # relabel the nodes
-    for j in range(time_offset[ts], time_offset[te]):
-        s = edges[2*j]
-        e = edges[2*j+1]
-        if in_ego[s] != -1 and in_ego[e] != -1:
-            s_ = in_ego[s]
-            e_ = in_ego[e]
-            neighbors[s_][e_] = 1
-            neighbors[e_][s_] = 1
-    degrees = np.zeros((curr,), dtype=int)
-    node_offset = np.zeros((curr+1,), dtype=int)
-    curr_offset = np.zeros((curr+1,), dtype=int)
-    for i in range(curr + 1):
-        if (i != curr):
-            degrees[i] = len(neighbors[i])
-        if i > 0:
-            node_offset[i] = node_offset[i-1] + degrees[i-1]
-            curr_offset[i] = node_offset[i]
-    neighborlist = np.zeros((node_offset[curr],), dtype=int)
-    for u in range(curr):
-        for v in neighbors[u].keys():
-            neighborlist[curr_offset[u]] = v
-            curr_offset[u] += 1
-    print('Graph query done!')  
-    return degrees, neighborlist, node_offset, label
+            degrees[in_ego[i]] = len(neighborlist[in_ego[i]])
+    print(neighborlist)
+    print(degrees)
+    print('end of ego query')
+    return degrees, neighborlist, label
 
 '''
 @ params
@@ -117,69 +151,8 @@ def query_ego_graph(edges, time_offset, ts, te, node_count, center):
     nodes -- a list of nodes in the order of degree ascending
     offset_degree -- id array to record the start index of each degree in {nodes}
 '''
-def core_decomposition(degrees, neighbors, offset_node, node_count):
-    max_degree = 0
-    for d in degrees:
-        max_degree = max(d, max_degree)
-    degree_list = []
-    for i in range(max_degree + 1):
-        degree_list.append(0)
-    for d in degrees:
-        degree_list[d] += 1
-    offset = 0
-    offset_degree = []
-    for i in range(max_degree + 2):
-        offset_degree.append(offset)
-        if i > max_degree:
-            break
-        offset = offset + degree_list[i]
-    degree_list_start = []
-    for i in range(max_degree + 1):
-        degree_list_start.append(offset_degree[i])
-    nodes = []
-    position = []
-    for i in range(node_count):
-        nodes.append(0)
-        position.append(0)
-    for i in range(node_count):
-        position[i] = degree_list_start[degrees[i]]
-        nodes[position[i]] = i
-        degree_list_start[degrees[i]] += 1
-    # main update calculation
-    for i in range(node_count):
-        v = nodes[i]
-        for j in range(offset_node[v], offset_node[v+1]):
-            u = neighbors[j]
-            if degrees[u] > degrees[v]:
-                du = degrees[u]
-                pu = position[u]
-                pw = offset_degree[du]
-                w = nodes[pw]
-                if u != w:
-                    nodes[pu] = w
-                    nodes[pw] = u
-                    position[u] = pw
-                    position[w] = pu
-                offset_degree[du] += 1
-                degrees[u] -= 1
-    print("End of core decomposition calculation")
-    return nodes, offset_degree
-
-'''
-@ params
-    degrees -- 1d arrat to record the degree for each node
-    neighbors -- 1d array to record all neighbors
-    offset_node -- 1d array to record the starting index for a node in {neighbors} 
-@ during calculation
-    max_degree -- the max degree for all the nodes
-    degree_list -- a list with length max degree, every element is a list of node ids of that degree
-    position -- a list of indexes of each node in the array {nodes}, if position[1] = 3 then node 1 has a index of 3 in {nodes}
-    degree_list_start -- a list of indexes shows the next empty index for each degree.
-@ returns
-    nodes -- a list of nodes in the order of degree ascending
-    offset_degree -- id array to record the start index of each degree in {nodes}
-'''
-def k_core(degrees, neighbors, offset_node, node_count, k):
+def k_core(degrees, neighbors, node_count, k):
+    print(neighbors)
     max_degree = 0
     for d in degrees:
         max_degree = max(d, max_degree)
@@ -212,8 +185,7 @@ def k_core(degrees, neighbors, offset_node, node_count, k):
         v = nodes[i]
         if degrees[v] >= k:
             break
-        for j in range(offset_node[v], offset_node[v+1]):
-            u = neighbors[j]
+        for u in neighbors[v]:
             if degrees[u] > degrees[v]:
                 du = degrees[u]
                 pu = position[u]
@@ -227,6 +199,8 @@ def k_core(degrees, neighbors, offset_node, node_count, k):
                 offset_degree[du] += 1
                 degrees[u] -= 1
     print("End of k-core calculation")
+    print(offset_degree)
+    print(nodes)
     return nodes, offset_degree
 
 '''
@@ -239,24 +213,24 @@ def k_core(degrees, neighbors, offset_node, node_count, k):
     authors -- the name of the author for each node
     k -- the k value
 '''
-def generate_graph(nodes, offset_degree, neighbors, node_offsets, labels, authors, k, id):
+def generate_graph(nodes, offset_degree, neighbors, labels, authors, k, id):
     in_ego_core = np.zeros((len(nodes), ), dtype=bool)
     graph = []
     authors_list  = []
     for i in range(offset_degree[k], offset_degree[len(offset_degree)-1]):
         in_ego_core[nodes[i]] = True
         data = {
-                'data': {
-                    'id': str(labels[nodes[i]]),
-                    'label': authors[labels[nodes[i]]]
-                }
+            'data': {
+                'id': str(labels[nodes[i]]),
+                'label': authors[labels[nodes[i]]]
             }
+        }
         if nodes[i] == 0:
             data['selected'] = True
         graph.append(data)
         authors_list.append({'id': str(labels[nodes[i]]), 'name': authors[labels[nodes[i]]]})
     for i in range(len(labels)):
-        for j in neighbors[node_offsets[i]:node_offsets[i+1]]:
+        for j in neighbors[i]:
             if i < j and in_ego_core[i] and in_ego_core[j]:
                 graph.append({
                     'data': {
