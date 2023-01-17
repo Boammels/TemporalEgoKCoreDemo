@@ -78,13 +78,13 @@ const Graph = () => {
         }
       ]}
       layout={{
-        name:'circle'
+        name:'circle',
       }}
       panningEnabled={true}
-      //zoomingEnabled={false}
-      zoom={0.9}
-      minZoom={0.9}
-      maxZoom={0.9}
+      zoomingEnabled={true}
+      //zoom={0.9}
+      //minZoom={0.9}
+      //maxZoom={0.9}
       selectionType='single'
 
     />}

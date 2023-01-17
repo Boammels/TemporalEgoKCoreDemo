@@ -13,7 +13,7 @@ function App() {
   return (
     <BrowserRouter>
       <header className='header'>
-        <a className='webName' href='/'>DBLP Ego-network K-core Calculator</a>
+        <a className='webName' href='/'>Ego Historical K-core of Co-author Network Calculator</a>
       </header>
       <Routes>
         <Route path="/" element={<Search />} />
