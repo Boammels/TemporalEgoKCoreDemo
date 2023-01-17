@@ -241,5 +241,3 @@ def generate_graph(nodes, offset_degree, neighbors, labels, authors, k, id):
                 })
     data_set = {'elements': graph, 'author': authors[id], 'author_list': authors_list}
     return data_set
-
-
